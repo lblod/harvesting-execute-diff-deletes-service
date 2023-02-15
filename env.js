@@ -2,18 +2,12 @@ import envvar from 'env-var';
 import * as N3 from 'n3';
 const { namedNode } = N3.DataFactory;
 
-export const TEMP_GRAPH_PREFIX = envvar
-  .get('TEMP_GRAPH_PREFIX')
-  .default('http://eredienst-mandatarissen-consumer/temp')
-  .asUrlString();
-
-export const TEMP_GRAPH_INSERTS = `${TEMP_GRAPH_PREFIX}-inserts`;
-export const TEMP_GRAPH_DELETES = `${TEMP_GRAPH_PREFIX}-deletes`;
-
-export const ORGANISATION_GRAPH_PREFIX = envvar
-  .get('ORGANISATION_GRAPH_PREFIX')
-  .default('http://mu.semte.ch/graphs/organizations/')
-  .asUrlString();
+export const TARGET_GRAPH = namedNode(
+  envvar
+    .get('TARGET_GRAPH')
+    .default('http://mu.semte.ch/graphs/public')
+    .asUrlString()
+);
 
 export const LOGLEVEL = envvar
   .get('LOGLEVEL')
@@ -25,10 +19,12 @@ export const WRITE_ERRORS = envvar
   .default('false')
   .asBool();
 
-export const ERROR_GRAPH = envvar
-  .get('ERROR_GRAPH')
-  .default('http://lblod.data.gift/errors')
-  .asUrlString();
+export const ERROR_GRAPH = namedNode(
+  envvar
+    .get('ERROR_GRAPH')
+    .default('http://lblod.data.gift/errors')
+    .asUrlString()
+);
 
 export const ERROR_BASE = envvar
   .get('ERR0R_BASE')
@@ -53,6 +49,14 @@ const PREFIXES = {
   adms: 'http://www.w3.org/ns/adms#',
   schema: 'http://schema.org/',
   locn: 'http://www.w3.org/ns/locn#',
+  nfo: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#',
+  nie: 'http://www.semanticdesktop.org/ontologies/2007/01/19/nie#',
+  dbpedia: 'http://dbpedia.org/ontology/',
+  task: 'http://redpencil.data.gift/vocabularies/tasks/',
+  tasko: 'http://lblod.data.gift/id/jobs/concept/TaskOperation/',
+  services: 'http://lblod.data.gift/services/',
+  js: 'http://redpencil.data.gift/id/concept/JobStatus/',
+  asj: 'http://data.lblod.info/id/automatic-submission-job/',
 };
 
 const BASE = {
@@ -77,3 +81,12 @@ export const SPARQL_PREFIXES = (() => {
   for (const key in PREFIXES) all.push(`PREFIX ${key}: <${PREFIXES[key]}>`);
   return all.join('\n');
 })();
+
+export const TASK_ONGOING_STATUS = NAMESPACES.js`busy`;
+export const TASK_SUCCESS_STATUS = NAMESPACES.js`success`;
+export const TASK_FAILURE_STATUS = NAMESPACES.js`failed`;
+
+export const OPERATION_PREDICATE = NAMESPACES.task`operation`;
+export const EXECUTE_DELETES_OPERATION = NAMESPACES.tasko`execute-diff-deletes`;
+
+export const CREATOR = NAMESPACES.services`harvester-execute-diff-deletes-service`;
