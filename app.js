@@ -33,6 +33,7 @@ app.post('/delta', async function (req, res) {
   try {
     //Don't trust the delta-notifier, filter as best as possible. We just need
     //the task that was created to get started.
+    //Filter for tasks about the execute diff deletes operation.
     const actualTasks = req.body
       .map((changeset) => changeset.inserts)
       .filter((inserts) => inserts.length > 0)
@@ -78,13 +79,33 @@ app.post('/delta', async function (req, res) {
 // Error handler
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Logs a message to the command line, according to the loglevel environment
+ * setting.
+ *
+ * @function
+ * @param {String} message - An extra message on top of the error to indicate
+ * where the error occured (or any other textual context).
+ * @param {Error} err - Instance of the standard JavaScript Error class
+ * or similar object that has a `message` property.
+ * @returns {undefined} Nothing
+ */
 function logError(message, err) {
   if (env.LOGLEVEL === 'error' || env.LOGLEVEL === 'info')
     console.error(`${message}\n${err}`);
 }
 
 /**
- * TODO
+ * Stores an error in the triplestore with a extra message.
+ *
+ * @async
+ * @function
+ * @param {String} message - An extra message on top of the error to indicate
+ * where the error occured (or any other textual context).
+ * @param {Error} err - Instance of the standard JavaScript Error class
+ * or similar object that has a `message` property.
+ * @returns {NamedNode} The error subject term that was created in the
+ * triplestore.
  */
 async function saveTaskError(message, err) {
   const errorStore = errorToStore(err, message);
