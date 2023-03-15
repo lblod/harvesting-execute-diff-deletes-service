@@ -31,6 +31,11 @@ export const ERROR_BASE = envvar
   .default('http://data.lblod.info/errors/')
   .asUrlString();
 
+export const MAX_BATCH_SIZE = envvar
+  .get('MAX_BATCH_SIZE')
+  .default('100')
+  .asIntPositive();
+
 const PREFIXES = {
   rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
   xsd: 'http://www.w3.org/2001/XMLSchema#',
