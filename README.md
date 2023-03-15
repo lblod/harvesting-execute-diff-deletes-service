@@ -41,7 +41,7 @@ harvesting-execute-diff-deletes:
 To make sure the delta-notifier sends the needed messages, add the following
 snippet to the `rules.js` file:
 
-```json
+```javascript
 {
   match: {
     predicate: {
@@ -100,6 +100,10 @@ Supply a value for them using the `environment` keyword in the
   printed. On `error`, only error messages are printed to the console. On
   `info`, both error messages and informational messages such as data
   processing results are printed. The amount of information might be limited.
+* `MAX_BATCH_SIZE`: *(optional, default: "100")* Deletes are executed in
+  batches. This variable sets the maximum size of such batches. A batch becomes
+  even smaller automatically when errors start occuring to a size of one triple
+  per batch. If there is stil an error, then the whole task will fail.
 * `WRITE_ERRORS`: *(optional, default: "false", boolean)* Indicates if errors
   need to be written to the triplestore.
 * `ERROR_GRAPH`: *(optional, default: "http://lblod.data.gift/errors")* Graph
