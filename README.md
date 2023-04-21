@@ -1,5 +1,19 @@
 # harvesting-execute-diff-deletes-service
 
+**IMPORTANT NOTE**
+
+**This service is deprecated, because it is missing an important feature that
+could only be implemented by joining code bases into a single project. This
+code has been merged into [the
+`import-with-sameas-service`](https://github.com/lblod/import-with-sameas-service/)
+to accomodate a sort of "transaction"-based publishing of triples. During this
+"transaction" deletes and inserts are both processed as a singular unit. All or
+nothing: all deletes and inserts, or none of them. This is to avoid that the
+database is left in an inconsistent state.**
+
+**Of course this repository is still useful, but because it is no longer is use
+in a stack, there is no incentive for further maintenance.**
+
 This service reacts to messages from the delta-notifier about tasks in the
 harvester stack. This service should be configured in the jobs-controller to
 work just after the
